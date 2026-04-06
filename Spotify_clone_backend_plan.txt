@@ -1,0 +1,91 @@
+# React & Next.js Learning Roadmap: Building a Spotify Clone
+
+This is your step-by-step guide to learning React basics by building a real project. For each phase, you will read about a core concept first, and then apply it immediately to build a feature.
+
+---
+
+## Phase 1: The UI & Components
+**The Goal:** Build the visual skeleton of the app (Sidebar and Main Content).
+
+**📚 Read & Learn This First:**
+* **React Components:** How to write a function that returns HTML (JSX).
+* **React Props:** How to pass data from a parent component to a child component. (Think of it as giving instructions to a component).
+* **Tailwind CSS:** How to style things quickly using utility classes.
+
+**🛠️ Develop This Feature:**
+1. Create a `Sidebar.tsx` component (for the left menu).
+2. Create a `SongCard.tsx` component.
+3. Pass "Title" and "Image" as **Props** to the `SongCard` so it knows what to display.
+4. Put dummy data in an array and use the `.map()` function to show a grid of multiple song cards on the home page.
+
+---
+
+## Phase 2: Interactivity & Local State
+**The Goal:** Make buttons work and show popups (Modals).
+
+**📚 Read & Learn This First:**
+* **The `useState` Hook:** This is how React "remembers" things. It allows you to track if a menu is open or closed, or what a user typed in a box.
+* **Events (`onClick`):** How to trigger a function when a user clicks a button.
+
+**🛠️ Develop This Feature:**
+1. Install `@radix-ui/react-dialog` to get a basic popup window.
+2. Build an `UploadModal.tsx` component.
+3. Add an "Upload" button in your Sidebar. 
+4. Use `useState` to track a variable called `isOpen`. When the button is clicked, change `isOpen` to true, which makes the Modal appear on the screen.
+
+---
+
+## Phase 3: Forms & Global State
+**The Goal:** Build the form to upload music and manage state across the whole app.
+
+**📚 Read & Learn This First:**
+* **Global State (Zustand):** Sometimes `useState` isn't enough because you need to share data between two completely separate components (like the Header and the Audio Player). Zustand is a simple library for this.
+* **React Hook Form:** The standard way to handle inputs, file uploads, and errors in React without making the app slow.
+
+**🛠️ Develop This Feature:**
+1. Install `zustand` and `react-hook-form`.
+2. Inside your `UploadModal`, build a form with inputs for "Song Title", "MP3 File", and "Cover Image".
+3. Use `react-hook-form` to make sure the user doesn't submit an empty form.
+4. Use `zustand` to create a global rule that says: "If the user is not logged in, they cannot open this upload modal."
+
+---
+
+## Phase 4: Database & Authentication
+**The Goal:** Let real users log in and save data to a database.
+
+**📚 Read & Learn This First:**
+* **Supabase Basics:** How a Backend-as-a-Service works. Understand what a PostgreSQL Table is, and what a Storage Bucket is.
+* **React Context API:** A way to wrap your entire application in a "bubble" of data so every component knows who is logged in.
+
+**🛠️ Develop This Feature:**
+1. Create a free Supabase project.
+2. Build an Auth Modal that lets users log in with their Email or GitHub.
+3. Write a function that takes the MP3 and Image from your Upload Form, saves the files into Supabase Storage, and saves the song title into a Supabase Database Table.
+
+---
+
+## Phase 5: Next.js Magic (Data Fetching)
+**The Goal:** Fetch the uploaded songs from the database and show them on the screen.
+
+**📚 Read & Learn This First:**
+* **Next.js Server Components:** How Next.js fetches data on the server *before* sending the website to the user. This is different from normal React and is much faster.
+
+**🛠️ Develop This Feature:**
+1. Go to your `app/page.tsx` file.
+2. Write a server function that connects to Supabase and grabs all the songs from your database table.
+3. Pass that real data into the `SongCard` components you built in Phase 1 (replacing the dummy data). Now your app is showing real database content!
+
+---
+
+## Phase 6: The Audio Player
+**The Goal:** Make the music actually play when someone clicks a song card.
+
+**📚 Read & Learn This First:**
+* **The `useEffect` Hook:** How to make React do something automatically when a specific piece of data changes (like pressing play when a new song is selected).
+* **Custom Hooks:** How to use pre-built logic like `use-sound` to handle audio.
+
+**🛠️ Develop This Feature:**
+1. Install `use-sound`.
+2. Build a `Player.tsx` component that sits fixed at the bottom of the screen.
+3. Update your Zustand Global State: When a user clicks a Song Card, save that song's ID in Zustand.
+4. Tell your `Player` component to listen to that Zustand state. When it sees a new Song ID, it should fetch the MP3 link from Supabase and use `use-sound` to play it!

@@ -1,0 +1,93 @@
+# Full-Stack Learning Roadmap: React + Node.js Spotify Clone
+
+This guide will teach you how to build a true client-server architecture. You will build a standalone React frontend and a standalone Node.js API backend, connecting them together to build a complete product.
+
+---
+
+## Phase 1: The UI & Components (Frontend)
+**The Goal:** Build the visual skeleton of the app (Sidebar and Main Content) using dummy data.
+
+**📚 Read & Learn This First:**
+* **React & Vite:** How to create a fast React app using Vite.
+* **React Components & Props:** How to build reusable UI blocks and pass data between them.
+* **Tailwind CSS:** How to style things quickly without writing separate CSS files.
+
+**🛠️ Develop This Feature:**
+1. Open your terminal and create your frontend: `npm create vite@latest frontend -- --template react`.
+2. Create a `Sidebar.jsx` and a `SongCard.jsx` component.
+3. Pass "Title" and "Image" as **Props** to the `SongCard`.
+4. Create an array of dummy songs in your code and use `.map()` to show a grid of cards on the home page.
+
+---
+
+## Phase 2: The Backend Foundation (Node.js)
+**The Goal:** Build your own custom API server that can send data to your frontend.
+
+**📚 Read & Learn This First:**
+* **Node.js & Express.js:** How to create a web server using JavaScript.
+* **REST APIs:** How to create routes (GET, POST) that computers use to talk to each other.
+* **Postman or ThunderClient:** Tools to test your APIs before connecting them to React.
+
+**🛠️ Develop This Feature:**
+1. Create a new folder called `backend` and run `npm init -y` and `npm install express`.
+2. Create a `server.js` file and start an Express server on port 5000.
+3. Create a GET route (`/api/songs`). When you visit this route, the server should respond with your array of dummy songs in JSON format.
+
+---
+
+## Phase 3: Database & Authentication (Backend)
+**The Goal:** Replace your dummy data with a real database and allow users to securely log in.
+
+**📚 Read & Learn This First:**
+* **MongoDB & Mongoose:** How to save data into a NoSQL database.
+* **JWT (JSON Web Tokens):** The industry standard for creating secure "login tickets" for users.
+* **Bcrypt:** How to encrypt user passwords so they are safe in the database.
+
+**🛠️ Develop This Feature:**
+1. Create a free database on **MongoDB Atlas** and connect your Express server to it.
+2. Create a `User` model and a `Song` model.
+3. Build POST routes for `/api/signup` and `/api/login` that check passwords and give the user a JWT token.
+
+---
+
+## Phase 4: File Uploads & Forms (Full Stack)
+**The Goal:** Let users upload MP3 files and images from React and save them via Node.js.
+
+**📚 Read & Learn This First:**
+* **Multer & Cloudinary (Backend):** How Node.js handles incoming files (Multer) and saves them to a cloud storage bucket (Cloudinary).
+* **React Hook Form (Frontend):** How to cleanly capture user inputs and files in React.
+* **CORS:** How to allow your React app (Port 5173) to securely talk to your Node app (Port 5000).
+
+**🛠️ Develop This Feature:**
+1. In your `backend`, create a POST route `/api/upload` that uses Multer to accept an MP3 and Image, uploads them to Cloudinary, and saves the song details in MongoDB.
+2. In your `frontend`, build an `UploadModal` component with a form.
+3. When the user clicks "Submit", use `axios` or `fetch` to send the form data from React to your Node.js `/api/upload` route.
+
+---
+
+## Phase 5: Fetching Real Data (Frontend)
+**The Goal:** Connect the frontend to the backend to display the uploaded songs.
+
+**📚 Read & Learn This First:**
+* **The `useEffect` Hook:** How to make React automatically fetch data from an API the moment a page loads.
+* **Global State (Zustand):** How to share the list of fetched songs across the whole app.
+
+**🛠️ Develop This Feature:**
+1. Go to your React home page component.
+2. Use the `useEffect` hook to make a GET request to your Node server (`http://localhost:5000/api/songs`).
+3. Take the real data coming from your database and pass it into your `SongCard` components.
+
+---
+
+## Phase 6: The Audio Player (Frontend)
+**The Goal:** Make the music actually play when someone clicks a song card.
+
+**📚 Read & Learn This First:**
+* **Custom Hooks (`use-sound`):** How to easily handle audio playback in React.
+* **Component Communication:** How clicking a card in the main area tells the player at the bottom what to do.
+
+**🛠️ Develop This Feature:**
+1. Install `use-sound` in your React app.
+2. Build a `Player.jsx` component that sits fixed at the bottom of the screen.
+3. Update your Zustand Global State: When a user clicks a Song Card, save that song's ID in the state.
+4. Tell your `Player` component to listen to that state. When it sees a new Song ID, it should read the Cloudinary MP3 link from your database data and play it!
