@@ -29,7 +29,19 @@ const getNewReleases = async (req, res) => {
     });
 
     // Send the albums data to the frontend
-    res.json(releasesResponse.data.albums.items);
+    // The specific album API returns an album object with 'tracks.items' and 'images'
+    const albumData = releasesResponse.data;
+    
+    // Map the tracks so they have the same shape the frontend expects (injecting the album images)
+    const formattedTracks = albumData.tracks?.items?.map(track => ({
+      id: track.id,
+      name: track.name,
+      artists: track.artists,
+      images: albumData.images,
+      preview_url: track.preview_url
+    })) || [];
+
+    res.json(formattedTracks);
   } catch (error) {
     console.error("Error fetching Spotify data:", error.response ? error.response.data : error.message);
     res.status(500).json({ error: "Failed to fetch Spotify data" });
