@@ -4,14 +4,17 @@ module.exports = {
   SPOTIFY: {
     // Used to request access tokens
     TOKEN_URL: 'https://accounts.spotify.com/api/token',
-    
+
     // Base URL for the Spotify Web API
     BASE_URL: 'https://api.spotify.com/v1',
-    
+
     // Specific endpoints (add more here as needed)
     // NOTE: Hardcoded to a specific album API per user request
-    NEW_RELEASES: 'https://api.spotify.com/v1/albums/4OYdTHNgjhXzgVjbqsb0tO',
+    // Spotify deprecated /browse APIs in late 2024. Using 'user saved tracks' as fallback to prevent 403 errors.
+    NEW_RELEASES: 'https://api.spotify.com/v1/me/tracks',
     FEATURED_PLAYLISTS: 'https://api.spotify.com/v1/browse/featured-playlists',
-    CATEGORIES: 'https://api.spotify.com/v1/browse/categories'
+    CATEGORIES: 'https://api.spotify.com/v1/browse/categories',
+    SEARCH: 'https://api.spotify.com/v1/search'
   }
+
 };

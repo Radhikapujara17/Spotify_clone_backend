@@ -5,6 +5,7 @@ const cors = require('cors');
 // Import routes
 const spotifyRoutes = require('./routes/spotifyRoutes');
 const userRoutes = require('./routes/userRoutes');
+const authRoutes = require('./routes/authRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -16,6 +17,7 @@ app.use(express.json());
 // Mount the imported routes
 app.use('/api/spotify', spotifyRoutes);
 app.use('/api/users', userRoutes);
+app.use('/auth', authRoutes);
 
 // A simple root route
 app.get('/', (req, res) => {
