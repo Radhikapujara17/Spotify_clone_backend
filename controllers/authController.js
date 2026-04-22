@@ -8,7 +8,7 @@ const FRONTEND_URI = process.env.FRONTEND_URI || 'http://localhost:5173';
 
 const login = (req, res) => {
   // Required scope to play songs and get user identity
-  const scope = 'streaming user-read-email user-read-private user-library-read user-library-modify user-read-playback-state user-modify-playback-state';
+  const scope = 'streaming user-read-email user-read-private user-library-read user-library-modify user-read-playback-state user-modify-playback-state playlist-read-private playlist-read-collaborative';
   
   res.redirect('https://accounts.spotify.com/authorize?' +
     querystring.stringify({
