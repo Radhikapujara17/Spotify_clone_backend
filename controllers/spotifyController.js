@@ -62,14 +62,15 @@ const searchSpotify = async (req, res) => {
     }
 
     const accessToken = authHeader.split(' ')[1];
+    console.log(req.query);
 
     const query = req.query.q;
     if (!query) {
       return res.status(400).json({ error: "Search query 'q' is required" });
     }
 
-    const limit = parseInt(req.query.limit) || 20;
-
+    const limit = Math.min(parseInt(req.query.limit) || 10, 10);
+    debugger;
     const searchResponse = await axios.get(endpoints.SPOTIFY.SEARCH, {
       headers: {
         Authorization: `Bearer ${accessToken}`
@@ -81,6 +82,7 @@ const searchSpotify = async (req, res) => {
       }
     });
 
+    console.log(searchResponse);
     const searchData = searchResponse.data;
 
     const formattedTracks = searchData.tracks?.items?.map(track => {
@@ -99,7 +101,7 @@ const searchSpotify = async (req, res) => {
     res.json(formattedTracks);
   } catch (error) {
     console.error("Error searching Spotify:", error.response ? error.response.data : error.message);
-    res.status(500).json({ error: "Failed to perform search" });
+    res.status(500).json({ error: "Failed to perform search", details: error.response ? error.response.data : error.message });
   }
 };
 

@@ -43,11 +43,11 @@ const callback = async (req, res) => {
 
     const { access_token, refresh_token, expires_in } = response.data;
 
-    // Send tokens to frontend. They will be stored in sessionStorage by React.
-    res.redirect(`${FRONTEND_URI}/?access_token=${access_token}&refresh_token=${refresh_token}&expires_in=${expires_in}`);
+    // Send tokens to frontend via hash fragment. They will be stored in sessionStorage by React.
+    res.redirect(`${FRONTEND_URI}/#access_token=${access_token}&refresh_token=${refresh_token}&expires_in=${expires_in}`);
   } catch (error) {
     console.error('Error during token exchange:', error?.response?.data || error);
-    res.redirect(`${FRONTEND_URI}/?error=invalid_token`);
+    res.redirect(`${FRONTEND_URI}/#error=invalid_token`);
   }
 };
 
