@@ -52,7 +52,7 @@ const callback = async (req, res) => {
 };
 
 const refresh = async (req, res) => {
-  const refresh_token = req.query.refresh_token;
+  const refresh_token = req.body.refresh_token;
   if (!refresh_token) {
     return res.status(400).json({ error: 'Refresh token is required' });
   }
