@@ -9,7 +9,7 @@ const FRONTEND_URI = process.env.FRONTEND_URI || 'http://localhost:5173';
 const login = (req, res) => {
   // Required scope to play songs and get user identity
   const scope = 'streaming user-read-email user-read-private user-library-read user-library-modify user-read-playback-state user-modify-playback-state playlist-read-private playlist-read-collaborative';
-  
+
   res.redirect('https://accounts.spotify.com/authorize?' +
     querystring.stringify({
       response_type: 'code',
@@ -21,7 +21,7 @@ const login = (req, res) => {
 
 const callback = async (req, res) => {
   const code = req.query.code || null;
-  
+
   if (!code) {
     return res.redirect(`${FRONTEND_URI}/?error=missing_code`);
   }
@@ -70,7 +70,7 @@ const refresh = async (req, res) => {
         Authorization: 'Basic ' + Buffer.from(CLIENT_ID + ':' + CLIENT_SECRET).toString('base64')
       }
     });
-    
+
     res.json(response.data);
   } catch (error) {
     console.error('Error during token refresh:', error?.response?.data || error);
