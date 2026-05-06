@@ -1,13 +1,15 @@
-require('dotenv').config();
-const express = require('express');
-const cors = require('cors');
-const helmet = require('helmet');
-const rateLimit = require('express-rate-limit');
+import dotenv from 'dotenv';
+dotenv.config();
+
+import express, { Request, Response } from 'express';
+import cors from 'cors';
+import helmet from 'helmet';
+import rateLimit from 'express-rate-limit';
+import cookieParser from 'cookie-parser';
 
 // Import routes
-const spotifyRoutes = require('./routes/spotifyRoutes');
-const userRoutes = require('./routes/userRoutes');
-const authRoutes = require('./routes/authRoutes');
+import spotifyRoutes from './routes/spotifyRoutes';
+import authRoutes from './routes/authRoutes';
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -15,7 +17,7 @@ const PORT = process.env.PORT || 5000;
 // Rate limiting configuration
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes)
+  max: 100, // Limit each IP to 100 requests per `window`
   message: 'Too many requests from this IP, please try again after 15 minutes'
 });
 
@@ -28,18 +30,22 @@ app.use(cors({
   credentials: true
 }));
 app.use(express.json());
+app.use(cookieParser());
 
 // Mount the imported routes
 app.use('/api/spotify', spotifyRoutes);
-app.use('/api/users', userRoutes);
 app.use('/auth', authRoutes);
 
 // A simple root route
-app.get('/', (req, res) => {
+app.get('/', (req: Request, res: Response) => {
   res.send('Hello World! The Spotify Clone Backend is running.');
 });
 
-// Start the server
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
-});
+// Start the server only if not in test mode
+if (process.env.NODE_ENV !== 'test') {
+  app.listen(PORT, () => {
+    console.log(`Server is running on http://localhost:${PORT}`);
+  });
+}
+
+export default app;

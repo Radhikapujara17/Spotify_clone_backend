@@ -1,22 +1,24 @@
-const endpoints = require('../config/endpoints');
-const axios = require('axios');
+import { Request, Response } from 'express';
+import endpoints from '../config/endpoints';
+import axios from 'axios';
 
 // Example controller function: Get new releases
-const getNewReleases = async (req, res) => {
+export const getNewReleases = async (req: Request, res: Response): Promise<void> => {
   try {
     const authHeader = req.headers.authorization;
     if (!authHeader) {
-      return res.status(401).json({ error: "Missing Authorization header" });
+      res.status(401).json({ error: "Missing Authorization header" });
+      return;
     }
 
     const accessToken = authHeader.split(' ')[1];
 
     // Support dynamic pagination
-    const offset = parseInt(req.query.offset) || 0;
-    const limit = parseInt(req.query.limit) || 20;
+    const offset = parseInt(req.query.offset as string) || 0;
+    const limit = parseInt(req.query.limit as string) || 20;
 
     // Fetch User's Liked Songs
-    const releasesResponse = await axios.get('https://api.spotify.com/v1/me/tracks', {
+    const releasesResponse = await axios.get(endpoints.SPOTIFY.NEW_RELEASES, {
       headers: {
         Authorization: `Bearer ${accessToken}`
       },
@@ -30,7 +32,7 @@ const getNewReleases = async (req, res) => {
     const playlistData = releasesResponse.data;
 
     // Map the playlist tracks so they have the same shape the frontend expects
-    const formattedTracks = playlistData.items?.map(item => {
+    const formattedTracks = playlistData.items?.map((item: any) => {
       const track = item.track;
       if (!track) return null;
       return {
@@ -48,29 +50,29 @@ const getNewReleases = async (req, res) => {
       items: formattedTracks,
       hasMore: !!playlistData.next
     });
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error fetching Spotify data:", error.response ? error.response.data : error.message);
     res.status(500).json({ error: "Failed to fetch Spotify data" });
   }
 };
 
-const searchSpotify = async (req, res) => {
+export const searchSpotify = async (req: Request, res: Response): Promise<void> => {
   try {
     const authHeader = req.headers.authorization;
     if (!authHeader) {
-      return res.status(401).json({ error: "Missing Authorization header" });
+      res.status(401).json({ error: "Missing Authorization header" });
+      return;
     }
 
     const accessToken = authHeader.split(' ')[1];
-    console.log(req.query);
 
-    const query = req.query.q;
+    const query = req.query.q as string;
     if (!query) {
-      return res.status(400).json({ error: "Search query 'q' is required" });
+      res.status(400).json({ error: "Search query 'q' is required" });
+      return;
     }
 
-    const limit = Math.min(parseInt(req.query.limit) || 10, 10);
-    debugger;
+    const limit = Math.min(parseInt(req.query.limit as string) || 10, 10);
     const searchResponse = await axios.get(endpoints.SPOTIFY.SEARCH, {
       headers: {
         Authorization: `Bearer ${accessToken}`
@@ -82,10 +84,9 @@ const searchSpotify = async (req, res) => {
       }
     });
 
-    console.log(searchResponse);
     const searchData = searchResponse.data;
 
-    const formattedTracks = searchData.tracks?.items?.map(track => {
+    const formattedTracks = searchData.tracks?.items?.map((track: any) => {
       if (!track) return null;
       return {
         id: track.id,
@@ -99,13 +100,8 @@ const searchSpotify = async (req, res) => {
     }).filter(Boolean) || [];
 
     res.json(formattedTracks);
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error searching Spotify:", error.response ? error.response.data : error.message);
     res.status(500).json({ error: "Failed to perform search", details: error.response ? error.response.data : error.message });
   }
-};
-
-module.exports = {
-  getNewReleases,
-  searchSpotify
 };

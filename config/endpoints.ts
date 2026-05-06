@@ -1,6 +1,6 @@
 // This file stores API endpoint URLs. You can update these later if needed.
 
-module.exports = {
+export default {
   SPOTIFY: {
     // Used to request access tokens
     TOKEN_URL: 'https://accounts.spotify.com/api/token',
@@ -16,5 +16,4 @@ module.exports = {
     CATEGORIES: 'https://api.spotify.com/v1/browse/categories',
     SEARCH: 'https://api.spotify.com/v1/search'
   }
-
 };
